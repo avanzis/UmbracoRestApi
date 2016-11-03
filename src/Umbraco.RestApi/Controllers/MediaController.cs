@@ -180,6 +180,18 @@ namespace Umbraco.RestApi.Controllers
             return found;
         }
 
+        protected override IMedia SetFileOnProperty(int id, string property, System.Web.HttpPostedFileBase file)
+        {
+            var node = MediaService.GetById(id);
+            if (node == null)
+                return null;
+
+            node.SetValue(property, file);
+            MediaService.Save(node);
+
+            return node;
+        }
+
         protected override IContentLinkTemplate<int> LinkTemplate
         {
             get { return new MediaLinkTemplate(CurrentVersionRequest); }
